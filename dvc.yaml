@@ -38,7 +38,7 @@ artifacts:
   output-model:
     path: models/output-model.keras
     type: model
-    desc: Model trained to segment (insert sample type).
+    desc: Model trained to segment cats.
     labels:
     - cv
     - segmentation

@@ -1,0 +1,120 @@
+schema: '2.0'
+stages:
+  data_split:
+    cmd: python src/data_split.py
+    deps:
+    - path: data/all_data/
+      hash: md5
+      md5: 03a11170167b61e403768827aee1961f.dir
+      size: 88090603
+      nfiles: 220
+    - path: src/data_split.py
+      hash: md5
+      md5: 92cbc3ea6a0740e559466a998e11ba99
+      size: 3506
+    params:
+      params.yaml:
+        base:
+          random_seed: 0
+          model_image_size: 256
+          loss_function: dice_loss
+          image_channels: 1
+          output_classes: 1
+        data_split:
+          test_split: 0.2
+          data_dir: data/all_data/
+          train_data_dir: data/train/
+          test_data_dir: data/test/
+    outs:
+    - path: data/test
+      hash: md5
+      md5: 2120b70bcd16eb9956018960571c4e56.dir
+      size: 17602767
+      nfiles: 44
+    - path: data/train
+      hash: md5
+      md5: eab0f77efbd665f8d5a8971f0a867334.dir
+      size: 70487836
+      nfiles: 176
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/train/
+      hash: md5
+      md5: eab0f77efbd665f8d5a8971f0a867334.dir
+      size: 70487836
+      nfiles: 176
+    - path: src/train.py
+      hash: md5
+      md5: e5ad3ad867ec54c29923ed85ba0dd96a
+      size: 10830
+    - path: src/unet.py
+      hash: md5
+      md5: 14e4831e31291f6c537064643c1761b1
+      size: 8360
+    params:
+      params.yaml:
+        base:
+          random_seed: 0
+          model_image_size: 256
+          loss_function: dice_loss
+          image_channels: 1
+          output_classes: 1
+        train:
+          train_data_dir: data/train/
+          model_save_dir: models/
+          batch_size: 5
+          epochs: 10
+          conv_activation_function: relu
+          final_activation_function: sigmoid
+          learning_rate: 0.001
+          norm_upper_bound: 4
+          norm_lower_bound: -1
+          validation_split: 0.2
+    outs:
+    - path: models/output-model.keras
+      hash: md5
+      md5: 133bd6aecd3da1e2d4b46708aa4093f3
+      size: 23468053
+    - path: results/train/
+      hash: md5
+      md5: 770c13a4ac8213b5e1b5092871ee60ca.dir
+      size: 1092
+      nfiles: 5
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/test/
+      hash: md5
+      md5: 2120b70bcd16eb9956018960571c4e56.dir
+      size: 17602767
+      nfiles: 44
+    - path: models/output-model.keras
+      hash: md5
+      md5: 133bd6aecd3da1e2d4b46708aa4093f3
+      size: 23468053
+    - path: src/evaluate.py
+      hash: md5
+      md5: 064b663f2aaccee7bc8e02a5546449c1
+      size: 7722
+    - path: src/unet.py
+      hash: md5
+      md5: 14e4831e31291f6c537064643c1761b1
+      size: 8360
+    params:
+      params.yaml:
+        base:
+          random_seed: 0
+          model_image_size: 256
+          loss_function: dice_loss
+          image_channels: 1
+          output_classes: 1
+        evaluate:
+          model_path: models/output-model.keras
+          test_data_dir: data/test/
+    outs:
+    - path: results/evaluate/
+      hash: md5
+      md5: 83ec194f55b760b0dfe5c2b1ade2c5eb.dir
+      size: 1803865
+      nfiles: 12
