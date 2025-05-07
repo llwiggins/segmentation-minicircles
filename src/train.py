@@ -82,10 +82,10 @@ def image_data_generator(
             else:
                 # logger.info(f"unique values in ground truth: {np.unique(ground_truth)}")
                 # logger.info(f"Ground truth max value: {np.max(ground_truth)} grabbing value 2 only")
-                ground_truth = np.where(ground_truth == 2, 1, 0)
+                assert (
+                    ground_truth.dtype == bool
+                ), f"Ground truth dtype: {ground_truth.dtype} should be bool, is {ground_truth.dtype}"
                 batch_output.append(ground_truth)
-                logger.info(f"ground truth unique values: {np.unique(ground_truth)}")
-                logger.info(f"ground truth counts: {np.bincount(ground_truth.flatten())}")
 
         # Convert the lists to numpy arrays
         batch_x = np.array(batch_input).astype(np.float32)
