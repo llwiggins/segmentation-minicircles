@@ -31,6 +31,11 @@ def image_data_generator(
 ):
     """Generate batches of images and ground truth masks."""
 
+    if image_channels != 1:
+        raise NotImplementedError(
+            f"Image channels {image_channels} not implemented. Only 1 channel images are supported."
+        )
+
     while True:
         # Select files for the batch
         logger.info(f"num image indexes: {len(image_indexes)}")
@@ -43,7 +48,7 @@ def image_data_generator(
         for index in batch_indexes:
             # Load the image and ground truth
             image = np.load(data_dir / f"image_{index}.npy")
-            ground_truth = np.load(data_dir / f"mask_{index}.npy").astype(np.uint8)
+            ground_truth = np.load(data_dir / f"mask_{index}.npy").astype(bool)
 
             # TODO: Augment the images: Scale and translate
 
@@ -82,10 +87,7 @@ def image_data_generator(
             else:
                 # logger.info(f"unique values in ground truth: {np.unique(ground_truth)}")
                 # logger.info(f"Ground truth max value: {np.max(ground_truth)} grabbing value 2 only")
-                assert (
-                    ground_truth.dtype == bool
-                ), f"Ground truth dtype: {ground_truth.dtype} should be bool, is {ground_truth.dtype}"
-                batch_output.append(ground_truth)
+                batch_output.append(ground_truth.astype(bool))
 
         # Convert the lists to numpy arrays
         batch_x = np.array(batch_input).astype(np.float32)
@@ -125,6 +127,7 @@ def train_model(
     logger.info(f"|  Train data directory: {train_data_dir}")
     logger.info(f"|  Model save directory: {model_save_dir}")
     logger.info(f"|  Model image size: {model_image_size}")
+    logger.info(f"|  Image channels: {image_channels}")
     logger.info(f"|  Conv activation function: {conv_activation_function}")
     logger.info(f"|  Final activation function: {final_activation_function}")
     logger.info(f"|  Learning rate: {learning_rate}")
@@ -132,7 +135,7 @@ def train_model(
     logger.info(f"|  Epochs: {epochs}")
     logger.info(f"|  Normalisation upper bound: {norm_upper_bound}")
     logger.info(f"|  Normalisation lower bound: {norm_lower_bound}")
-    logger.info(f"|  Test size: {validation_split}")
+    logger.info(f"|  Validation split: {validation_split}")
     logger.info(f"|  Loss function: {loss_function}")
 
     # Set the random seed
@@ -251,14 +254,14 @@ if __name__ == "__main__":
 
     logger.info("Train: Converting the paths to Path objects.")
     # Convert the paths to Path objects
-    train_data_dir = Path(train_params["train_data_dir"])
-    model_save_dir = Path(train_params["model_save_dir"])
+    train_data_dir_path = Path(train_params["train_data_dir"])
+    model_save_dir_path = Path(train_params["model_save_dir"])
 
     # Train the model
     train_model(
         random_seed=base_params["random_seed"],
-        train_data_dir=train_data_dir,
-        model_save_dir=model_save_dir,
+        train_data_dir=train_data_dir_path,
+        model_save_dir=model_save_dir_path,
         model_image_size=(base_params["model_image_size"], base_params["model_image_size"]),
         image_channels=base_params["image_channels"],
         output_classes=base_params["output_classes"],

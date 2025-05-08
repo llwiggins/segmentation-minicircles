@@ -5,8 +5,8 @@ stages:
     deps:
     - path: data/all_data/
       hash: md5
-      md5: 03a11170167b61e403768827aee1961f.dir
-      size: 88090603
+      md5: 418367d88831a56dc67023fccda46110.dir
+      size: 87373824
       nfiles: 220
     - path: src/data_split.py
       hash: md5
@@ -28,26 +28,26 @@ stages:
     outs:
     - path: data/test
       hash: md5
-      md5: 2120b70bcd16eb9956018960571c4e56.dir
-      size: 17602767
+      md5: 1bf9b4f88a442138128e8e7a38e93fa7.dir
+      size: 17461071
       nfiles: 44
     - path: data/train
       hash: md5
-      md5: eab0f77efbd665f8d5a8971f0a867334.dir
-      size: 70487836
+      md5: 237a84427001899a45c7c0981237d374.dir
+      size: 69912753
       nfiles: 176
   train:
     cmd: python src/train.py
     deps:
     - path: data/train/
       hash: md5
-      md5: eab0f77efbd665f8d5a8971f0a867334.dir
-      size: 70487836
+      md5: 237a84427001899a45c7c0981237d374.dir
+      size: 69912753
       nfiles: 176
     - path: src/train.py
       hash: md5
-      md5: e5ad3ad867ec54c29923ed85ba0dd96a
-      size: 10830
+      md5: ffde3010628193ca2ff5b473acb9db02
+      size: 10859
     - path: src/unet.py
       hash: md5
       md5: 14e4831e31291f6c537064643c1761b1
@@ -64,7 +64,7 @@ stages:
           train_data_dir: data/train/
           model_save_dir: models/
           batch_size: 5
-          epochs: 10
+          epochs: 15
           conv_activation_function: relu
           final_activation_function: sigmoid
           learning_rate: 0.001
@@ -74,25 +74,25 @@ stages:
     outs:
     - path: models/output-model.keras
       hash: md5
-      md5: 133bd6aecd3da1e2d4b46708aa4093f3
-      size: 23468053
+      md5: 4aed6c1d1090ea762a06a1459ce7fc94
+      size: 23468014
     - path: results/train/
       hash: md5
-      md5: 770c13a4ac8213b5e1b5092871ee60ca.dir
-      size: 1092
+      md5: 3dee76998ac7a67e265725588489d667.dir
+      size: 1557
       nfiles: 5
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: data/test/
       hash: md5
-      md5: 2120b70bcd16eb9956018960571c4e56.dir
-      size: 17602767
+      md5: 1bf9b4f88a442138128e8e7a38e93fa7.dir
+      size: 17461071
       nfiles: 44
     - path: models/output-model.keras
       hash: md5
-      md5: 133bd6aecd3da1e2d4b46708aa4093f3
-      size: 23468053
+      md5: 4aed6c1d1090ea762a06a1459ce7fc94
+      size: 23468014
     - path: src/evaluate.py
       hash: md5
       md5: 064b663f2aaccee7bc8e02a5546449c1
@@ -115,6 +115,6 @@ stages:
     outs:
     - path: results/evaluate/
       hash: md5
-      md5: 83ec194f55b760b0dfe5c2b1ade2c5eb.dir
-      size: 1803865
+      md5: 97674b39e2b67e7006e522e6a576b6b1.dir
+      size: 1980155
       nfiles: 12

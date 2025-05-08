@@ -211,6 +211,8 @@ def unet_model(
     outputs = Conv2D(output_classes, kernel_size=(1, 1), activation=final_activation_function)(conv9)
 
     model = Model(inputs=[inputs], outputs=[outputs])
+    # print structure
+    print(type(model))
     # custom learning rate
     optimizer = Adam(learning_rate)
 
