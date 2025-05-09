@@ -18,9 +18,26 @@ from unet import unet_model
 yaml = YAML(typ="safe")
 
 
-def zoom_and_shift(image: np.ndarray, ground_truth: np.ndarray, max_zoom_percentage: float = 0.1) -> np.ndarray:
-    """Zooms in on the image by a random amount between 0 and max_zoom_percentage,
+def zoom_and_shift(
+    image: np.ndarray, ground_truth: np.ndarray, max_zoom_percentage: float
+) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Zooms in on the image by a random amount between 0 and max_zoom_percentage,
     then shifts the image by a random amount up to the number of zoomed pixels.
+
+    Parameters
+    ----------
+    image : np.ndarray
+        The image to zoom and shift.
+    ground_truth : np.ndarray
+        The ground truth mask to zoom and shift.
+    max_zoom_percentage : float
+        The maximum percentage of the image size to zoom in on.
+
+    Returns
+    -------
+    Tuple[np.ndarray, np.ndarray]
+        The zoomed and shifted image and ground truth mask.
     """
 
     # Choose a zoom percentage and caluculate the number of pixels to zoom in
@@ -153,6 +170,8 @@ def train_model(
     model_image_size: Tuple[int, int],
     image_channels: int,
     output_classes: int,
+    augment_zoom_percent: float,
+    augment_flip_rotate: bool,
     conv_activation_function: str,
     final_activation_function: str,
     learning_rate: float,
@@ -173,6 +192,9 @@ def train_model(
     logger.info(f"|  Model save directory: {model_save_dir}")
     logger.info(f"|  Model image size: {model_image_size}")
     logger.info(f"|  Image channels: {image_channels}")
+    logger.info(f"|  Output classes: {output_classes}")
+    logger.info(f"|  Augment zoom percentage: {augment_zoom_percent}")
+    logger.info(f"|  Augment flip & rotate: {augment_flip_rotate}")
     logger.info(f"|  Conv activation function: {conv_activation_function}")
     logger.info(f"|  Final activation function: {final_activation_function}")
     logger.info(f"|  Learning rate: {learning_rate}")
@@ -227,6 +249,8 @@ def train_model(
         model_image_size=model_image_size,
         image_channels=image_channels,
         output_classes=output_classes,
+        augment_zoom_percent=augment_zoom_percent,
+        augment_flip_rotate=augment_flip_rotate,
         norm_upper_bound=norm_upper_bound,
         norm_lower_bound=norm_lower_bound,
     )
@@ -238,6 +262,8 @@ def train_model(
         model_image_size=model_image_size,
         image_channels=image_channels,
         output_classes=output_classes,
+        augment_zoom_percent=0,
+        augment_flip_rotate=False,
         norm_upper_bound=norm_upper_bound,
         norm_lower_bound=norm_lower_bound,
     )
@@ -330,6 +356,8 @@ if __name__ == "__main__":
         learning_rate=train_params["learning_rate"],
         batch_size=train_params["batch_size"],
         epochs=train_params["epochs"],
+        augment_zoom_percent=train_params["augment_zoom_percent"],
+        augment_flip_rotate=train_params["augment_flip_rotate"],
         norm_upper_bound=train_params["norm_upper_bound"],
         norm_lower_bound=train_params["norm_lower_bound"],
         validation_split=train_params["validation_split"],
