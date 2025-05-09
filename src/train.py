@@ -189,8 +189,23 @@ def train_model(
 
     logger.info("Training: Loading data")
     # Find the indexes of all the image files in the format of image_<index>.npy
-    image_indexes = [int(re.search(r"\d+", file.name).group()) for file in train_data_dir.glob("image_*.npy")]
-    mask_indexes = [int(re.search(r"\d+", file.name).group()) for file in train_data_dir.glob("mask_*.npy")]
+    image_files = list(train_data_dir.glob("image_*.npy"))
+    image_indexes = []
+    for image_file in image_files:
+        match = re.search(r"\d+", image_file.name)
+        if match:
+            image_indexes.append(int(match.group()))
+        else:
+            raise ValueError(f"Image file name {image_file.name} does not match the expected format.")
+    # Find the indexes of all the mask files in the format of mask_<index>.npy
+    mask_files = list(train_data_dir.glob("mask_*.npy"))
+    mask_indexes = []
+    for mask_file in mask_files:
+        match = re.search(r"\d+", mask_file.name)
+        if match:
+            mask_indexes.append(int(match.group()))
+        else:
+            raise ValueError(f"Mask file name {mask_file.name} does not match the expected format.")
 
     # Check that the image and mask indexes are the same
     if set(image_indexes) != set(mask_indexes):
