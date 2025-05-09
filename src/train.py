@@ -18,6 +18,40 @@ from unet import unet_model
 yaml = YAML(typ="safe")
 
 
+def zoom_and_shift(image: np.ndarray, ground_truth: np.ndarray, max_zoom_percentage: float = 0.1) -> np.ndarray:
+    """Zooms in on the image by a random amount between 0 and max_zoom_percentage,
+    then shifts the image by a random amount up to the number of zoomed pixels.
+    """
+
+    # Choose a zoom percentage and caluculate the number of pixels to zoom in
+    zoom = np.random.uniform(0, max_zoom_percentage)
+    zoom_pixels = int(image.shape[0] * zoom)
+
+    # If there is zoom, choose a random shift
+    if int(zoom_pixels) > 0:
+        shift_x = np.random.randint(int(-zoom_pixels), int(zoom_pixels))
+        shift_y = np.random.randint(int(-zoom_pixels), int(zoom_pixels))
+
+        # Zoom and shift the image
+        zoomed_and_shifted_image = image[
+            zoom_pixels + shift_x : -zoom_pixels + shift_x,
+            zoom_pixels + shift_y : -zoom_pixels + shift_y,
+        ]
+        zoomed_and_shifted_ground_truth = ground_truth[
+            zoom_pixels + shift_x : -zoom_pixels + shift_x,
+            zoom_pixels + shift_y : -zoom_pixels + shift_y,
+        ]
+    else:
+        # Do nothing
+        shift_x = 0
+        shift_y = 0
+
+        zoomed_and_shifted_image = image
+        zoomed_and_shifted_ground_truth = ground_truth
+
+    return zoomed_and_shifted_image, zoomed_and_shifted_ground_truth
+
+
 # generator for data
 def image_data_generator(
     data_dir: Path,
@@ -26,6 +60,8 @@ def image_data_generator(
     model_image_size: Tuple[int, int],
     image_channels: int,
     output_classes: int,
+    augment_zoom_percent: float,
+    augment_flip_rotate: bool,
     norm_upper_bound: float,
     norm_lower_bound: float,
 ):
@@ -50,7 +86,18 @@ def image_data_generator(
             image = np.load(data_dir / f"image_{index}.npy")
             ground_truth = np.load(data_dir / f"mask_{index}.npy").astype(bool)
 
-            # TODO: Augment the images: Scale and translate
+            # Augment: zoom and shift
+            image, ground_truth = zoom_and_shift(image, ground_truth, max_zoom_percentage=augment_zoom_percent)
+            # Augment: flip & rotate
+            if augment_flip_rotate:
+                # 50% chance to flip
+                if np.random.rand() > 0.5:
+                    image = np.flip(image, axis=1)
+                    ground_truth = np.flip(ground_truth, axis=1)
+                # rotate to random multiple of 90 degrees
+                rotation = np.random.randint(0, 4)
+                image = np.rot90(image, k=rotation)
+                ground_truth = np.rot90(ground_truth, k=rotation)
 
             # Resize without interpolation
             pil_image = Image.fromarray(image)
@@ -65,8 +112,6 @@ def image_data_generator(
             image = np.clip(image, norm_lower_bound, norm_upper_bound)
             image = image - norm_lower_bound
             image = image / (norm_upper_bound - norm_lower_bound)
-
-            # TODO: Augment images: Flipping and rotate
 
             # Add the image and ground truth to the batch
             batch_input.append(image)
