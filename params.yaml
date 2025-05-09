@@ -13,11 +13,13 @@ data_split:
 train:
   train_data_dir: data/train/
   model_save_dir: models/
-  batch_size: 5
-  epochs: 15
+  batch_size: 6
+  epochs: 20
   conv_activation_function: relu # Options: relu, sigmoid
   final_activation_function: sigmoid # Options: softmax (for multi-class), sigmoid (for binary)
   learning_rate: 1e-03
+  augment_zoom_percent: 0.1
+  augment_flip_rotate: true
   norm_upper_bound: 4
   norm_lower_bound: -1
   validation_split: 0.2

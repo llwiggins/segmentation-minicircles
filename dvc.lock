@@ -46,12 +46,12 @@ stages:
       nfiles: 176
     - path: src/train.py
       hash: md5
-      md5: ffde3010628193ca2ff5b473acb9db02
-      size: 10859
+      md5: 12c6c4fa049a950eb7f3da3a72a7f373
+      size: 14294
     - path: src/unet.py
       hash: md5
-      md5: 14e4831e31291f6c537064643c1761b1
-      size: 8360
+      md5: 02054ba044ba73a69128c66c7725a717
+      size: 8405
     params:
       params.yaml:
         base:
@@ -63,23 +63,25 @@ stages:
         train:
           train_data_dir: data/train/
           model_save_dir: models/
-          batch_size: 5
-          epochs: 15
+          batch_size: 6
+          epochs: 20
           conv_activation_function: relu
           final_activation_function: sigmoid
           learning_rate: 0.001
+          augment_zoom_percent: 0.1
+          augment_flip_rotate: true
           norm_upper_bound: 4
           norm_lower_bound: -1
           validation_split: 0.2
     outs:
     - path: models/output-model.keras
       hash: md5
-      md5: 4aed6c1d1090ea762a06a1459ce7fc94
-      size: 23468014
+      md5: 11a4ead69a60ca987929ee55d855b94c
+      size: 23460494
     - path: results/train/
       hash: md5
-      md5: 3dee76998ac7a67e265725588489d667.dir
-      size: 1557
+      md5: e4d7be51bbdfe34033253ada924008f6.dir
+      size: 2003
       nfiles: 5
   evaluate:
     cmd: python src/evaluate.py
@@ -91,16 +93,16 @@ stages:
       nfiles: 44
     - path: models/output-model.keras
       hash: md5
-      md5: 4aed6c1d1090ea762a06a1459ce7fc94
-      size: 23468014
+      md5: 11a4ead69a60ca987929ee55d855b94c
+      size: 23460494
     - path: src/evaluate.py
       hash: md5
       md5: 064b663f2aaccee7bc8e02a5546449c1
       size: 7722
     - path: src/unet.py
       hash: md5
-      md5: 14e4831e31291f6c537064643c1761b1
-      size: 8360
+      md5: 02054ba044ba73a69128c66c7725a717
+      size: 8405
     params:
       params.yaml:
         base:
@@ -115,6 +117,6 @@ stages:
     outs:
     - path: results/evaluate/
       hash: md5
-      md5: 97674b39e2b67e7006e522e6a576b6b1.dir
-      size: 1980155
+      md5: d3611283bedf2990ce1dd54c2ccd370a.dir
+      size: 2003940
       nfiles: 12
