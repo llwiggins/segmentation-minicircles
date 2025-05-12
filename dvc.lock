@@ -16,7 +16,7 @@ stages:
       params.yaml:
         base:
           random_seed: 0
-          model_image_size: 256
+          model_image_size: 512
           loss_function: dice_loss
           image_channels: 1
           output_classes: 1
@@ -56,32 +56,32 @@ stages:
       params.yaml:
         base:
           random_seed: 0
-          model_image_size: 256
+          model_image_size: 512
           loss_function: dice_loss
           image_channels: 1
           output_classes: 1
         train:
           train_data_dir: data/train/
           model_save_dir: models/
-          batch_size: 6
-          epochs: 20
+          batch_size: 9
+          epochs: 70
           conv_activation_function: relu
           final_activation_function: sigmoid
-          learning_rate: 0.001
-          augment_zoom_percent: 0.1
+          learning_rate: 0.0001
+          augment_zoom_percent: 0.2
           augment_flip_rotate: true
-          norm_upper_bound: 4
+          norm_upper_bound: 5
           norm_lower_bound: -1
           validation_split: 0.2
     outs:
     - path: models/output-model.keras
       hash: md5
-      md5: d5ab0b12afa2cb02e588ec1f338843a5
-      size: 23460494
+      md5: c10bd864ff8984b35bb68fff5e16f6c1
+      size: 23460573
     - path: results/train/
       hash: md5
-      md5: aedd731559233d70abdc0470437ab6ad.dir
-      size: 1991
+      md5: ecb89d7ec146e647629fefacbabaf91b.dir
+      size: 6405
       nfiles: 5
   evaluate:
     cmd: python src/evaluate.py
@@ -93,8 +93,8 @@ stages:
       nfiles: 44
     - path: models/output-model.keras
       hash: md5
-      md5: d5ab0b12afa2cb02e588ec1f338843a5
-      size: 23460494
+      md5: c10bd864ff8984b35bb68fff5e16f6c1
+      size: 23460573
     - path: src/evaluate.py
       hash: md5
       md5: 80cbd78857db43137f24118a3ed04caa
@@ -107,7 +107,7 @@ stages:
       params.yaml:
         base:
           random_seed: 0
-          model_image_size: 256
+          model_image_size: 512
           loss_function: dice_loss
           image_channels: 1
           output_classes: 1
@@ -117,6 +117,6 @@ stages:
     outs:
     - path: results/evaluate/
       hash: md5
-      md5: aff901b108bf7d61c17e44a703f482c9.dir
-      size: 1978994
+      md5: 95cf9485bea4c10db74f31bc35390326.dir
+      size: 1911621
       nfiles: 12
