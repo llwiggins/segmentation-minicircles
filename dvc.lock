@@ -97,8 +97,8 @@ stages:
       size: 23460494
     - path: src/evaluate.py
       hash: md5
-      md5: 064b663f2aaccee7bc8e02a5546449c1
-      size: 7722
+      md5: 80cbd78857db43137f24118a3ed04caa
+      size: 7797
     - path: src/unet.py
       hash: md5
       md5: 02054ba044ba73a69128c66c7725a717
