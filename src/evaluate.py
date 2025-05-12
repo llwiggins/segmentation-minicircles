@@ -114,21 +114,23 @@ def evaluate(
 
             # Plot the image, mask and predicted mask and log it
             num_channels = mask_predicted_thresholded.shape[-1]
-            fig, ax = plt.subplots(num_channels + 1, 4, figsize=(15, 5))
+
             print(f"Number of channels: {num_channels}")
             logger.info(f"num true pixels in predicted mask thresholded: {np.sum(mask_predicted_thresholded)}")
             logger.info(f"num true pixels in predicted mask: {np.sum(mask_predicted)}")
             if num_channels == 1:
-                ax[0, 0].imshow(image[:, :, 0], cmap="viridis")
-                ax[0, 0].set_title("Image")
-                ax[0, 1].imshow(mask[:, :, 0], cmap="binary")
-                ax[0, 1].set_title("Ground Truth Mask")
-                ax[0, 2].imshow(mask_predicted_thresholded[:, :, 0], cmap="binary")
-                ax[0, 2].set_title("Predicted Mask")
-                ax[0, 3].imshow(mask_predicted)
-                ax[0, 3].set_title("Predicted Mask raw")
+                fig, ax = plt.subplots(1, 4, figsize=(15, 5))
+                ax[0].imshow(image[:, :, 0], cmap="viridis")
+                ax[0].set_title("Image")
+                ax[1].imshow(mask[:, :, 0], cmap="binary")
+                ax[1].set_title("Ground Truth Mask")
+                ax[2].imshow(mask_predicted_thresholded[:, :, 0], cmap="binary")
+                ax[2].set_title("Predicted Mask")
+                ax[3].imshow(mask_predicted)
+                ax[3].set_title("Predicted Mask raw")
             else:
                 logger.info(f"Number of channels: {num_channels}")
+                fig, ax = plt.subplots(num_channels + 1, 4, figsize=(15, 5))
                 for i in range(num_channels):
                     ax[i, 0].imshow(image[:, :, 0], cmap="viridis")
                     ax[i, 0].set_title("Image")
@@ -138,14 +140,14 @@ def evaluate(
                     ax[i, 2].set_title(f"Predicted Mask Channel {i}")
                     ax[i, 3].imshow(mask_predicted[:, :, i])
                     ax[i, 3].set_title(f"Predicted Mask raw Channel {i}")
-            # plot summed predicted mask
-            ax[num_channels, 0].imshow(image[:, :, 0], cmap="viridis")
-            ax[num_channels, 0].set_title("Image")
-            ax[num_channels, 1].imshow(mask[:, :, 0])
-            ax[num_channels, 1].set_title("Ground Truth Mask")
-            ax[num_channels, 2].imshow(mask_predicted_2d, cmap="binary")
-            ax[num_channels, 2].set_title("Predicted Mask Summed")
-            # plt.savefig(f"{plot_save_dir}/test_image_{index}.png")
+                # plot summed predicted mask
+                ax[num_channels, 0].imshow(image[:, :, 0], cmap="viridis")
+                ax[num_channels, 0].set_title("Image")
+                ax[num_channels, 1].imshow(mask[:, :, 0])
+                ax[num_channels, 1].set_title("Ground Truth Mask")
+                ax[num_channels, 2].imshow(mask_predicted_2d, cmap="binary")
+                ax[num_channels, 2].set_title("Predicted Mask Summed")
+                # plt.savefig(f"{plot_save_dir}/test_image_{index}.png")
             live.log_image(f"test_image_plot_{index}.png", fig)
 
         live.summary["dice_multi"] = dice_multi
