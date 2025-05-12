@@ -14,10 +14,10 @@ train:
   train_data_dir: data/train/
   model_save_dir: models/
   batch_size: 9
-  epochs: 70
+  epochs: 220
   conv_activation_function: relu # Options: relu, sigmoid
   final_activation_function: sigmoid # Options: softmax (for multi-class), sigmoid (for binary)
-  learning_rate: 1e-04
+  learning_rate: 1e-05
   augment_zoom_percent: 0.2
   augment_flip_rotate: true
   norm_upper_bound: 5
