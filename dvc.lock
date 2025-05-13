@@ -67,7 +67,7 @@ stages:
           epochs: 400
           conv_activation_function: relu
           final_activation_function: sigmoid
-          learning_rate: 1e-05
+          learning_rate: 0.0001
           augment_zoom_percent: 0.2
           augment_flip_rotate: true
           norm_upper_bound: 5
@@ -76,12 +76,12 @@ stages:
     outs:
     - path: models/output-model.keras
       hash: md5
-      md5: 6020385c382bd1889346b3a193bd9e0c
-      size: 23460573
+      md5: 569cd3dd5d51dcbf99f390df61baf98f
+      size: 23460534
     - path: results/train/
       hash: md5
-      md5: bbf1f1d686d69f95deaf628f570e8bfd.dir
-      size: 36865
+      md5: 7c739304500e23c5c8880ca25774598d.dir
+      size: 37109
       nfiles: 5
   evaluate:
     cmd: python src/evaluate.py
@@ -93,8 +93,8 @@ stages:
       nfiles: 44
     - path: models/output-model.keras
       hash: md5
-      md5: 6020385c382bd1889346b3a193bd9e0c
-      size: 23460573
+      md5: 569cd3dd5d51dcbf99f390df61baf98f
+      size: 23460534
     - path: src/evaluate.py
       hash: md5
       md5: 80cbd78857db43137f24118a3ed04caa
@@ -117,6 +117,6 @@ stages:
     outs:
     - path: results/evaluate/
       hash: md5
-      md5: e9b269ff4bf4cc038ad004430b4e6860.dir
-      size: 2134040
+      md5: a14ea5a08cc24e7925482a657f725327.dir
+      size: 1856155
       nfiles: 12

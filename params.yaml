@@ -17,7 +17,7 @@ train:
   epochs: 400
   conv_activation_function: relu # Options: relu, sigmoid
   final_activation_function: sigmoid # Options: softmax (for multi-class), sigmoid (for binary)
-  learning_rate: 1e-05
+  learning_rate: 1e-04
   augment_zoom_percent: 0.2
   augment_flip_rotate: true
   norm_upper_bound: 5
