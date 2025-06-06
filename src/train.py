@@ -79,6 +79,7 @@ def image_data_generator(
     output_classes: int,
     augment_zoom_percent: float,
     augment_flip_rotate: bool,
+    augment_vshift: tuple[float, float],
     norm_upper_bound: float,
     norm_lower_bound: float,
 ):
@@ -115,6 +116,14 @@ def image_data_generator(
                 rotation = np.random.randint(0, 4)
                 image = np.rot90(image, k=rotation)
                 ground_truth = np.rot90(ground_truth, k=rotation)
+
+            # Add random vertical shift
+            if augment_vshift[0] != 0 or augment_vshift[1] != 0:
+                # Get random float between -augment_vshift and augment_vshift
+                vshift = np.random.uniform(-augment_vshift[0], augment_vshift[1])
+                # Shift the image and ground truth vertically
+                if vshift > 0:
+                    image += vshift
 
             # Resize without interpolation
             pil_image = Image.fromarray(image)
