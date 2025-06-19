@@ -1,3 +1,8 @@
 /all_data
 test
 train
+/images
+/masks
+/cropped_images
+/saved_models
+/cropped_labels

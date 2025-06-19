@@ -1,0 +1,6 @@
+outs:
+- md5: af501c8397dc5c5bd2a50df44384ead2.dir
+  size: 14971079
+  nfiles: 151
+  hash: md5
+  path: cropped_labels
