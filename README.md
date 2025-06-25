@@ -1,1 +1,1 @@
-# segmentation-damage
+# segmentation-minicircles
