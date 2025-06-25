@@ -1,2 +1,6 @@
 [hydra]
     enabled = False
+[core]
+    remote = myremote
+['remote "myremote"']
+    url = gdrive://1x01t-ZE-UgxSjAzH3AxOZQw6LomYnMhl
